@@ -1,8 +1,116 @@
 .vehicles-container {
-  max-width: 4000px;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+
+.vehicles-container h2 {
+  margin-bottom: 1.5rem;
+  color: #2d6a4f;
+  text-align: center;
+}
+
+.vehicles-table {
   width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.vehicles-table th,
+.vehicles-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.vehicles-table th {
+  background: #f3f4f6;
+  color: #333;
+  font-weight: 600;
+}
+
+.vehicles-table tr:last-child td {
+  border-bottom: none;
+}
+
+.vehicles-table tr:hover {
+  background: #f6faff;
+}
+
+.vehicles-table button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.vehicles-table .block-button {
+  background: #fbbf24;
+  color: #fff;
+}
+
+.vehicles-table .block-button:hover {
+  background: #f59e42;
+}
+
+.vehicles-table .delete-button {
+  background: #ef4444;
+  color: #fff;
+}
+
+.vehicles-table .delete-button:hover {
+  background: #c81e1e;
+}
+
+.vehicles-table .cancel-button {
+  background: #6b7280;
+  color: #fff;
+}
+
+.vehicles-table .cancel-button:hover {
+  background: #374151;
+}
+
+.loading-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin: 50px 0;
+}
+
+/* Form styling */
+.vehicles-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.vehicles-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+
+.vehicles-form button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.vehicles-form button:hover {
+  background: #1d4ed8;
 }
 
 /* Page Header */

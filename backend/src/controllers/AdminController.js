@@ -7,7 +7,11 @@ const login = async (req, res) => {
 
   try {
     const admin = await Admin.findOne({ email });
-    if (!admin || admin.password !== password) {
+    if (!admin) {
+      return res.json({ error: true, message: "Invalid email" });
+    }
+
+    if (admin.password !== password) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -15,10 +19,25 @@ const login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    res.json({ token });
+    res.json({ 
+      token,
+      name: admin.name,
+      email: admin.email
+    });
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
   }
 };
 
-module.exports = { login };
+const createAdmin = async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    await Admin.create({ name, email, password });
+    res.json({ success: true, message: "Admin created!" });
+  } catch (err) {
+    console.error("Admin create error:", err);
+    res.status(500).json({ success: false, message: "Error creating admin", error: err });
+  }
+};
+
+module.exports = { login, createAdmin };

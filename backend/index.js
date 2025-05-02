@@ -2,8 +2,28 @@ const express = require("express") //express....
 const mongoose = require("mongoose")
 const cors = require("cors")
 require('dotenv').config();
+const http = require('http');
+const socketIo = require('socket.io');
 //express object..
 const app = express()
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:5173", //frontend url
+    methods: ["GET", "POST"]
+  }
+});
+
+// Make io accessible in routes/controllers
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
 app.use(cors({
     origin: "http://localhost:5173", //frontend url
     credentials: true, 
@@ -37,7 +57,7 @@ const insuranceRoutes = require("./src/routes/InsuranceRoutes")
 app.use("/insurance",insuranceRoutes)
 
 const carRoutes = require("./src/routes/CarRoutes")
-app.use("/car",carRoutes)
+app.use("/car", carRoutes)
 
 const reviewRoutes = require("./src/routes/ReviewRoutes")
 app.use("/review",reviewRoutes)
@@ -49,7 +69,10 @@ const wishlistRoutes = require("./src/routes/WishlistRoutes")
 app.use("/wishlist",wishlistRoutes)
 
 const notification = require("./src/routes/NotificationRoutes")
-app.use("/notification",notification)
+app.use("/notification", notification)
+
+const adminRoutes = require("./src/routes/AdminRoutes")
+app.use("/admin", adminRoutes)
 
 mongoose.connect("mongodb://127.0.0.1:27017/vehicle_vault").then(()=>{
     console.log("Connected to MongoDB")
@@ -57,9 +80,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/vehicle_vault").then(()=>{
 .catch((err) => console.error("MongoDB connection error:", err));
 
 //server creation...
-const PORT = process.env.PORT || 3000
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`)
+server.listen(process.env.PORT || 3000,()=>{
+    console.log(`Server is running on port ${process.env.PORT || 3000}`)
 })
 
 // Error handling middleware

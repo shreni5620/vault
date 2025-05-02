@@ -1,0 +1,350 @@
+/* Listings Management Container */
+.listings-container {
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+  }
+  
+  /* Header Styles */
+  .listings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .listings-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .breadcrumb {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .breadcrumb-link {
+    color: #4a90e2;
+    text-decoration: none;
+  }
+  
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #2c3e50;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Controls Section */
+  .listings-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .search-controls {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .search-input-wrapper {
+    position: relative;
+    flex: 1;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  
+  .filter-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .filter-button:hover {
+    background: #f5f5f5;
+  }
+  
+  .status-filters {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .status-filter-button {
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    text-transform: capitalize;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .status-filter-button:hover {
+    background: #f5f5f5;
+  }
+  
+  .status-filter-button.active {
+    background: #4a90e2;
+    color: white;
+    border-color: #4a90e2;
+  }
+  
+  /* Table Styles */
+  .table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+  
+  .listings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  .table-header-row {
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .table-header-cell {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .table-row {
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+  }
+  
+  .table-row:hover {
+    background: #f9f9f9;
+  }
+  
+  .table-row td {
+    padding: 12px 16px;
+    vertical-align: middle;
+  }
+  
+  /* Status Badges */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  .status-badge.approved {
+    background: #e6f7ee;
+    color: #10b981;
+  }
+  
+  .status-badge.pending {
+    background: #fff8e6;
+    color: #f59e0b;
+  }
+  
+  .status-badge.rejected {
+    background: #feecec;
+    color: #ef4444;
+  }
+  
+  /* Featured Badges */
+  .featured-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #e6f3ff;
+    color: #1e88e5;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .not-featured {
+    color: #999;
+    font-style: italic;
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .action-button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #666;
+  }
+  
+  .action-button:hover {
+    background: #f0f0f0;
+  }
+  
+  .action-button.approve:hover {
+    color: #10b981;
+  }
+  
+  .action-button.reject:hover {
+    color: #ef4444;
+  }
+  
+  .action-button.view:hover {
+    color: #1e88e5;
+  }
+  
+  .action-button.feature:hover {
+    color: #10b981;
+  }
+  
+  .action-button.unfeature:hover {
+    color: #f59e0b;
+  }
+  
+  .action-button.delete:hover {
+    color: #ef4444;
+  }
+  
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+  }
+  
+  .pagination-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .pagination-button {
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .pagination-button:hover:not(:disabled) {
+    background: #f5f5f5;
+  }
+  
+  .pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pagination-button.active {
+    background: #4a90e2;
+    color: white;
+    border-color: #4a90e2;
+  }
+  
+  .pagination-ellipsis {
+    padding: 6px 12px;
+    color: #666;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .listings-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .search-controls {
+      flex-direction: column;
+    }
+    
+    .status-filters {
+      flex-wrap: wrap;
+    }
+  }

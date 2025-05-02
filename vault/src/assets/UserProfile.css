@@ -1,0 +1,98 @@
+.user-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile h1 {
+  font-size: 2rem;
+  color: #1a202c;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.user-profile form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.user-profile form div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-profile label {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.user-profile input {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1a202c;
+  background-color: #f8f9fa;
+  transition: border-color 0.2s;
+}
+
+.user-profile input:focus {
+  outline: none;
+  border-color: #2d6cdf;
+}
+
+.user-profile button {
+  padding: 0.75rem 1.5rem;
+  background-color: #2d6cdf;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.user-profile button:hover {
+  background-color: #2563eb;
+}
+
+.user-profile .profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-profile .profile-info p {
+  font-size: 1.125rem;
+  color: #4a5568;
+}
+
+.user-profile .profile-info strong {
+  color: #1a202c;
+  margin-right: 0.5rem;
+}
+
+.user-profile .button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.user-profile .button-group button {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .user-profile {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+} 

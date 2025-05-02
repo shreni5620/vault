@@ -25,7 +25,16 @@ const createNotification = async (req, res) => {
     await notification.save();
 
     // Emit notification to connected clients
-    req.app.get('io').emit('newNotification', notification);
+    const io = req.app.get('io');
+    if (io) {
+      if (recipients.includes('all')) {
+        io.emit('newNotification', notification);
+      } else {
+        recipients.forEach(userId => {
+          io.to(`user-${userId}`).emit('newNotification', notification);
+        });
+      }
+    }
 
     res.status(201).json({
       error: false,
@@ -53,7 +62,10 @@ const getNotifications = async (req, res) => {
     }
 
     const notifications = await Notification.find({
-      recipients: userId
+      $or: [
+        { recipients: userId },
+        { recipients: 'all' }
+      ]
     }).sort({ timestamp: -1 });
 
     res.status(200).json({
@@ -81,23 +93,29 @@ const markAsRead = async (req, res) => {
       });
     }
 
-    const notification = await Notification.findOneAndUpdate(
-      { _id: notificationId, recipients: userId },
-      { read: true },
-      { new: true }
-    );
+    const foundNotification = await Notification.findById(notificationId);
 
-    if (!notification) {
+    if (!foundNotification) {
       return res.status(404).json({
         error: true,
         message: "Notification not found"
       });
     }
 
+    if (!foundNotification.recipients.includes(userId) && !foundNotification.recipients.includes('all')) {
+      return res.status(403).json({
+        error: true,
+        message: "Not authorized to update this notification"
+      });
+    }
+
+    foundNotification.read = true;
+    await foundNotification.save();
+
     res.status(200).json({
       error: false,
       message: "Notification marked as read",
-      notification
+      notification: foundNotification
     });
   } catch (error) {
     console.error('Error marking notification as read:', error);
@@ -120,17 +138,23 @@ const deleteNotification = async (req, res) => {
       });
     }
 
-    const notification = await Notification.findOneAndDelete({
-      _id: notificationId,
-      recipients: userId
-    });
+    const foundNotification = await Notification.findById(notificationId);
 
-    if (!notification) {
+    if (!foundNotification) {
       return res.status(404).json({
         error: true,
         message: "Notification not found"
       });
     }
+
+    if (!foundNotification.recipients.includes(userId) && !foundNotification.recipients.includes('all')) {
+      return res.status(403).json({
+        error: true,
+        message: "Not authorized to delete this notification"
+      });
+    }
+
+    await Notification.findByIdAndDelete(notificationId);
 
     res.status(200).json({
       error: false,
@@ -145,9 +169,14 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+const addNotification = async (req, res) => {
+  // Implementation of addNotification function
+};
+
 module.exports = {
   createNotification,
   getNotifications,
   markAsRead,
-  deleteNotification
+  deleteNotification,
+  addNotification
 };

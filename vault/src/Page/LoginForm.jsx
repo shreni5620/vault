@@ -22,23 +22,22 @@ const LoginForm = () => {
       return;
     }
 
-    // Hardcoded admin check
-    if (email === "admin1@gmail.com" && password === "123456") {
-      navigate('/dashboard', { replace: true }); // Redirect to admin page
-      return;
-    }
-
     try {
       const response = await axios.post('http://localhost:3000/user/login', { email, password });
 
       if (response.data.error === false) {
-        // Store the token in localStorage
-        localStorage.setItem('token', response.data.token);
         // Store login state
         localStorage.setItem('isLoggedIn', 'true');
-        // Navigate to dashboard
-        navigate('/', { replace: true });
+        localStorage.setItem('token', response.data.token);
+        // Save name and email
+        localStorage.setItem('userData', JSON.stringify({
+          name: response.data.name,
+          email: response.data.email
+        }));
+        // Notify other components (like Navbar)
         window.dispatchEvent(new Event('loginStatusChanged'));
+        // Navigate to dashboard or home
+        navigate('/', { replace: true });
       } else {
         setError(response.data.message);
       }
@@ -63,7 +62,7 @@ const LoginForm = () => {
           <h2 style={{ textAlign: "center", color: "#2d6cdf", marginBottom: "10px" }}>Welcome to VehicleVault</h2>
           <p style={{ textAlign: "center", color: "#666", marginBottom: "20px" }}>Sign in to your account</p>
 
-          {error && <p style={{ color: "#2d5cf6", textAlign: "center" }}>{error}</p>}
+          {error && <p style={{ color: "#e53e3e", textAlign: "center" }}>{error}</p>}
 
           <form onSubmit={submitHandler}>
             <label style={{ display: "block", color: "#333", marginBottom: "5px" }}>Email address</label>

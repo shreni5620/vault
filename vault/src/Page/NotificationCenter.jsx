@@ -123,6 +123,13 @@ const NotificationCenter = () => {
     }
   };
 
+  useEffect(() => {
+    axios.get('http://localhost:3000/notification?userId=' + userId)
+      .then(res => {
+        if (res.data.success) setNotifications(res.data.notifications);
+      });
+  }, []);
+
   return (
     <div className="notification-center">
       <button 

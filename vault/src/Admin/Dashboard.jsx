@@ -23,6 +23,9 @@ function Dashboard() {
     setActiveSettingsTab(tabId);
   };
 
+  const adminEmail = localStorage.getItem('adminEmail');
+  const adminName = localStorage.getItem('adminName');
+
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -56,7 +59,9 @@ function Dashboard() {
       />
       <div className={`dashboard-main${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         <Navbar currentPage={currentPage} toggleSidebar={toggleSidebar} />
-        <main className="dashboard-content">{renderPage()}</main>
+        <main className="dashboard-content">
+          {renderPage()}
+        </main>
       </div>
     </div>
   );

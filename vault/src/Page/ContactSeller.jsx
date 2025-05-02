@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, User, Mail, Phone, MessageSquare, MapPin, Car } from 'lucide-react';
 import "../assets/ContactSeller.css";
+import axios from 'axios';
 
 const ContactSeller = ({ car, onClose }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const ContactSeller = ({ car, onClose }) => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,11 +23,21 @@ const ContactSeller = ({ car, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Contact Seller Form:', formData);
-    setSubmitted(true);
+    try {
+      await axios.post('http://localhost:3000/user/contact-seller', {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        preferredContact: formData.preferredContact
+      });
+      setStatus('Message sent successfully!');
+      setSubmitted(true);
+    } catch (err) {
+      setStatus('Failed to send message.');
+    }
   };
 
   if (submitted) {
@@ -156,6 +168,7 @@ const ContactSeller = ({ car, onClose }) => {
           </div>
         </form>
       </div>
+      {status && <p>{status}</p>}
     </div>
   );
 };

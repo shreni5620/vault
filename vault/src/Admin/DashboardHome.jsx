@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -26,13 +26,25 @@ const metrics = [
 ];
 
 function DashboardHome() {
-  const recentVehicles = [
-    { id: 'VH-2345', model: 'BMW X5', price: '$78,900', status: 'approved', date: 'May 15, 2025' },
-    { id: 'VH-2344', model: 'Tesla Model 3', price: '$42,500', status: 'pending', date: 'May 14, 2025' },
-    { id: 'VH-2343', model: 'Mercedes GLC', price: '$52,300', status: 'approved', date: 'May 13, 2025' },
-    { id: 'VH-2342', model: 'Audi Q7', price: '$65,700', status: 'approved', date: 'May 12, 2025' },
-    { id: 'VH-2341', model: 'Toyota Camry', price: '$28,500', status: 'rejected', date: 'May 11, 2025' },
-  ];
+  const [recentVehicles, setRecentVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch recent vehicles from backend
+    const fetchRecentVehicles = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/car');
+        const data = await res.json();
+        // Assuming your backend returns { data: [...] }
+        setRecentVehicles(data.data.slice(-5).reverse()); // Show last 5 added vehicles, most recent first
+      } catch (err) {
+        setRecentVehicles([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecentVehicles();
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -103,17 +115,33 @@ function DashboardHome() {
               </tr>
             </thead>
             <tbody>
-              {recentVehicles.map((vehicle) => (
-                <tr key={vehicle.id} className="table-row">
-                  <td>{vehicle.id}</td>
-                  <td>{vehicle.model}</td>
-                  <td>{vehicle.price}</td>
-                  <td>
-                    <span className={`status-badge ${vehicle.status}`}>{vehicle.status}</span>
-                  </td>
-                  <td>{vehicle.date}</td>
+              {loading ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "center" }}>Loading...</td>
                 </tr>
-              ))}
+              ) : recentVehicles.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "center" }}>No recent vehicles to display.</td>
+                </tr>
+              ) : (
+                recentVehicles.map((vehicle, idx) => (
+                  <tr key={vehicle._id || idx} className="table-row">
+                    <td>{vehicle._id || idx + 1}</td>
+                    <td>{vehicle.model}</td>
+                    <td>{vehicle.price}</td>
+                    <td>
+                      <span className={`status-badge ${vehicle.status || "active"}`}>
+                        {vehicle.status || "N/A"}
+                      </span>
+                    </td>
+                    <td>
+                      {vehicle.listingDate
+                        ? new Date(vehicle.listingDate).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
