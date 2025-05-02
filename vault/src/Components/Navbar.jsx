@@ -1,10 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import "../assets/Navbar.css";
 import NotificationCenter from "../Page/NotificationCenter";
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkLogin = () => {
+      setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
+    };
+    checkLogin();
+    window.addEventListener('loginStatusChanged', checkLogin);
+    return () => window.removeEventListener('loginStatusChanged', checkLogin);
+  }, []);
+
+  const handleSignOut = () => {
+    // Clear login state and token
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    // Redirect to home page
+    navigate('/');
+  };
+
   return (
     <nav className="navbar">
       <div className="left-section">
@@ -21,11 +42,13 @@ const Navbar = () => {
         <Link to="/wishlist" className="favorites-link">
           <Heart size={20} className="heart-icon"/>
         </Link>
-        <Link to="/login" className="nav-button login">Login</Link>
-        {/*<Link to="/signup" className="nav-button signup">Sign Up</Link>*/}
+        {isLoggedIn ? (
+          <button onClick={handleSignOut} className="nav-button signout">Sign Out</button>
+        ) : (
+          <Link to="/login" className="nav-button login">Login</Link>
+        )}
       </div>
     </nav>
-    
   );
 };
 

@@ -34,8 +34,11 @@ const LoginForm = () => {
       if (response.data.error === false) {
         // Store the token in localStorage
         localStorage.setItem('token', response.data.token);
+        // Store login state
+        localStorage.setItem('isLoggedIn', 'true');
         // Navigate to dashboard
         navigate('/', { replace: true });
+        window.dispatchEvent(new Event('loginStatusChanged'));
       } else {
         setError(response.data.message);
       }

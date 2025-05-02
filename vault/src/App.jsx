@@ -119,6 +119,7 @@ import ListingsManagement from './Admin/ListingsManagement';
 import { Settings, Sidebar } from 'lucide-react';
 import UserList from './Admin/UserList';
 import VehiclesList from './Admin/VehiclesList';
+import NotificationManager from './Admin/NotificationManager';
 import AdminLoginForm from './Admin/AdminLoginForm';
 
 
@@ -180,6 +181,7 @@ function App() {
         <Route path='/admin/analytics' element={<Analytics />} />
         <Route path='dashboardhome' element={<DashboardHome />} />
         <Route path='listingmanagement' element={<ListingsManagement />} />
+        <Route path='notificationmanager' element={<NotificationManager />} />
         <Route path='navbar' element={<Navbar />} />
         <Route path='settings' element={<Settings />} />
         <Route path='sidebar' element={<Sidebar />} />
