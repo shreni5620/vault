@@ -1,12 +1,9 @@
-const express = require('express');
+// backend/src/routes/AdminRoutes.js
+const express = require("express");
 const router = express.Router();
-const AdminController = require('../controllers/AdminController');
+const { login } = require("../controllers/AdminController");
 
-// Public routes
-router.post('/register', AdminController.registerAdmin);
-router.post('/login', AdminController.loginAdmin);
+router.post("/login", login);
 
-// Open route - no middleware
-router.get('/all', AdminController.getAllAdmins);
-
+// You can add more admin routes here
 module.exports = router;

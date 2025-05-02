@@ -21,15 +21,14 @@ function DashboardHome() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Dashboard Overview</h1>
-        <div className="text-sm text-gray-500">
+        <h1 className="text-2xl font-semibold dark:text-white">Dashboard Overview</h1>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           <a href="#" className="hover:underline text-blue-500">Home</a> / Dashboard
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Stat Card */}
         {[
           {
             icon: <Car size={20} />,
@@ -64,11 +63,14 @@ function DashboardHome() {
             trendColor: 'text-red-500',
           },
         ].map((stat, idx) => (
-          <div key={idx} className="bg-white rounded-xl p-4 shadow-md flex items-start gap-4">
-            <div className="p-2 rounded-full bg-gray-100 text-gray-700">{stat.icon}</div>
+          <div
+            key={idx}
+            className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md flex items-start gap-4 hover:shadow-lg transition-shadow duration-300"
+          >
+            <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white">{stat.icon}</div>
             <div>
-              <h3 className="text-xl font-bold">{stat.value}</h3>
-              <p className="text-gray-500">{stat.label}</p>
+              <h3 className="text-xl font-bold dark:text-white">{stat.value}</h3>
+              <p className="text-gray-500 dark:text-gray-400">{stat.label}</p>
               <div className={`flex items-center gap-1 mt-1 text-sm ${stat.trendColor}`}>
                 {stat.trendIcon}
                 <span>{stat.trend} from last month</span>
@@ -78,21 +80,20 @@ function DashboardHome() {
         ))}
       </div>
 
-      {/* Charts + Table Section */}
+      {/* Charts + Table */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Monthly Listings Chart Placeholder */}
-        <div className="bg-white p-4 rounded-xl shadow-md">
+        {/* Chart Placeholder */}
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Monthly Listings</h3>
-            <select className="text-sm border rounded px-2 py-1">
+            <h3 className="text-lg font-semibold dark:text-white">Monthly Listings</h3>
+            <select className="text-sm border dark:border-gray-700 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
               <option>Last 7 days</option>
               <option>Last 30 days</option>
               <option>Last 90 days</option>
               <option>Last year</option>
             </select>
           </div>
-          {/* Chart Placeholder */}
-          <div className="flex items-end justify-between h-40 w-full">
+          <div className="flex items-end justify-between h-40 w-full overflow-x-auto">
             {[
               { label: 'Jan', height: '40%' },
               { label: 'Feb', height: '65%' },
@@ -103,21 +104,21 @@ function DashboardHome() {
             ].map((bar, idx) => (
               <div key={idx} className="flex flex-col items-center w-full">
                 <div className="w-6 bg-blue-500 rounded-t-md" style={{ height: bar.height }}></div>
-                <span className="mt-1 text-sm text-gray-500">{bar.label}</span>
+                <span className="mt-1 text-sm text-gray-500 dark:text-gray-400">{bar.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Recent Vehicles Table */}
-        <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md overflow-x-auto">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Recent Vehicles</h3>
+            <h3 className="text-lg font-semibold dark:text-white">Recent Vehicles</h3>
             <button className="text-blue-500 text-sm hover:underline">View All</button>
           </div>
           <table className="min-w-full text-sm text-left">
-            <thead>
-              <tr className="text-gray-500 border-b">
+            <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0 z-10">
+              <tr className="text-gray-500 dark:text-gray-300 border-b dark:border-gray-600">
                 <th className="py-2 px-4">ID</th>
                 <th className="py-2 px-4">Model</th>
                 <th className="py-2 px-4">Price</th>
@@ -127,24 +128,24 @@ function DashboardHome() {
             </thead>
             <tbody>
               {recentVehicles.map((vehicle) => (
-                <tr key={vehicle.id} className="border-b hover:bg-gray-50">
-                  <td className="py-2 px-4">{vehicle.id}</td>
-                  <td className="py-2 px-4">{vehicle.model}</td>
-                  <td className="py-2 px-4">{vehicle.price}</td>
+                <tr key={vehicle.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-600">
+                  <td className="py-2 px-4 dark:text-white">{vehicle.id}</td>
+                  <td className="py-2 px-4 dark:text-white">{vehicle.model}</td>
+                  <td className="py-2 px-4 dark:text-white">{vehicle.price}</td>
                   <td className="py-2 px-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         vehicle.status === 'approved'
-                          ? 'bg-green-100 text-green-600'
+                          ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300'
                           : vehicle.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-600'
-                          : 'bg-red-100 text-red-600'
+                          ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300'
+                          : 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300'
                       }`}
                     >
                       {vehicle.status}
                     </span>
                   </td>
-                  <td className="py-2 px-4">{vehicle.date}</td>
+                  <td className="py-2 px-4 dark:text-white">{vehicle.date}</td>
                 </tr>
               ))}
             </tbody>

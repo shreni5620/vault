@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Bell, Search, Menu, X, Sun, Moon, 
-  MessageSquare, User, Car 
+import {
+  Bell, Search, Menu, X, Sun, Moon,
+  MessageSquare, User, Car
 } from 'lucide-react';
 
 function Navbar({ currentPage, toggleSidebar }) {
@@ -42,8 +42,8 @@ function Navbar({ currentPage, toggleSidebar }) {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      {/* Left section */}
-      <div className="flex items-center space-x-4">
+      {/* Left */}
+      <div className="flex items-center gap-4">
         <button onClick={toggleSidebar} className="text-gray-600 dark:text-gray-300">
           <Menu size={20} />
         </button>
@@ -52,14 +52,14 @@ function Navbar({ currentPage, toggleSidebar }) {
         </h1>
       </div>
 
-      {/* Center search bar */}
+      {/* Search Bar */}
       {searchOpen && (
-        <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full w-full max-w-md mx-4">
+        <div className="flex items-center w-full max-w-md mx-6 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
           <Search size={18} className="text-gray-500 dark:text-gray-400" />
           <input
             type="text"
             placeholder="Search vehicles, users, listings..."
-            className="flex-1 bg-transparent outline-none text-sm text-gray-800 dark:text-gray-200"
+            className="flex-1 bg-transparent px-2 py-1 text-sm text-gray-800 dark:text-gray-200 outline-none"
             autoFocus
           />
           <button onClick={toggleSearch} className="text-gray-500 dark:text-gray-400">
@@ -68,8 +68,8 @@ function Navbar({ currentPage, toggleSidebar }) {
         </div>
       )}
 
-      {/* Right section */}
-      <div className="flex items-center space-x-4">
+      {/* Right */}
+      <div className="flex items-center gap-4">
         {!searchOpen && (
           <button
             className="text-gray-600 dark:text-gray-300 hover:text-blue-500"
@@ -93,7 +93,7 @@ function Navbar({ currentPage, toggleSidebar }) {
             className="relative text-gray-600 dark:text-gray-300 hover:text-red-500"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
               2
             </span>
           </button>
@@ -107,20 +107,18 @@ function Navbar({ currentPage, toggleSidebar }) {
                 {notifications.map((n) => (
                   <div
                     key={n.id}
-                    className={`flex items-start px-4 py-3 border-b dark:border-gray-700 ${
+                    className={`flex items-start gap-3 px-4 py-3 border-b dark:border-gray-700 ${
                       !n.read ? 'bg-gray-100 dark:bg-gray-700' : ''
                     }`}
                   >
-                    <div className="mr-3">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-700 rounded-full flex items-center justify-center">
-                        {n.title.includes('vehicle') ? (
-                          <Car size={16} />
-                        ) : n.title.includes('User') ? (
-                          <User size={16} />
-                        ) : (
-                          <MessageSquare size={16} />
-                        )}
-                      </div>
+                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-700 rounded-full flex items-center justify-center">
+                      {n.title.includes('vehicle') ? (
+                        <Car size={16} className="text-blue-600 dark:text-white" />
+                      ) : n.title.includes('User') ? (
+                        <User size={16} className="text-blue-600 dark:text-white" />
+                      ) : (
+                        <MessageSquare size={16} className="text-blue-600 dark:text-white" />
+                      )}
                     </div>
                     <div className="text-sm text-gray-700 dark:text-gray-200">
                       <p className="font-medium">{n.title}</p>

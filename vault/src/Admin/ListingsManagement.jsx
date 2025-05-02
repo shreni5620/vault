@@ -16,10 +16,9 @@ function ListingsManagement() {
     { id: 'LST-1006', vehicle: 'Ford F-150', seller: 'Jessica Brown', date: 'May 10, 2025', price: '$45,900', status: 'approved', featured: false },
   ];
 
-  const filteredListings = listingsData.filter(listing => {
-    if (filterStatus === 'all') return true;
-    return listing.status === filterStatus;
-  });
+  const filteredListings = listingsData.filter(listing =>
+    filterStatus === 'all' || listing.status === filterStatus
+  );
 
   const statusColor = {
     approved: 'bg-green-100 text-green-700',

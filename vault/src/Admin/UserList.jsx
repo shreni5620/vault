@@ -57,7 +57,7 @@ function UsersList() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-4 md:px-8">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">User Management</h1>
@@ -100,7 +100,7 @@ function UsersList() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-gray-800 text-white p-4 rounded-lg flex items-center space-x-4">
           <UserCheck size={20} />
           <div>
@@ -186,7 +186,7 @@ function UsersList() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-gray-500">Showing 1-5 of 15,230 users</span>
         <div className="flex space-x-2">
           <button className="px-4 py-2 bg-gray-200 rounded-lg text-gray-600" disabled>Previous</button>
