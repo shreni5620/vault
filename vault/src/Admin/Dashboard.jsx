@@ -7,13 +7,20 @@ import UsersList from './UserList';
 import ListingsManagement from './ListingsManagement';
 import Analytics from './Analytics';
 import Settings from './Settings';
+import NotificationManager from './NotificationManager';
+import './Dashboard.css';
 
 function Dashboard() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [activeSettingsTab, setActiveSettingsTab] = useState('profile');
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  const handleSettingsTabChange = (tabId) => {
+    setActiveSettingsTab(tabId);
   };
 
   const renderPage = () => {
@@ -28,30 +35,28 @@ function Dashboard() {
         return <ListingsManagement />;
       case 'analytics':
         return <Analytics />;
+      case 'notifications':
+        return <NotificationManager />;
       case 'settings':
-        return <Settings />;
+        return <Settings activeTab={activeSettingsTab} setActiveTab={handleSettingsTabChange} />;
       default:
         return <DashboardHome />;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 text-gray-800">
-      <div
-        className={`transition-all duration-300 ${
-          sidebarCollapsed ? 'w-16' : 'w-64'
-        } bg-white shadow-md`}
-      >
-        <Sidebar
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          isCollapsed={sidebarCollapsed}
-          toggleSidebar={toggleSidebar}
-        />
-      </div>
-      <div className="flex-1 flex flex-col">
+    <div className="dashboard-root">
+      <Sidebar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isCollapsed={sidebarCollapsed}
+        toggleSidebar={toggleSidebar}
+        activeSettingsTab={activeSettingsTab}
+        setActiveSettingsTab={handleSettingsTabChange}
+      />
+      <div className={`dashboard-main${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         <Navbar currentPage={currentPage} toggleSidebar={toggleSidebar} />
-        <main className="flex-1 p-4 overflow-y-auto">{renderPage()}</main>
+        <main className="dashboard-content">{renderPage()}</main>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import './NotificationManager.css';
 
 const socket = io('http://localhost:5000');
 
@@ -48,22 +49,22 @@ const NotificationManager = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8 max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+    <div className="notification-manager">
+      <h2 className="notification-title">
         Send Notification
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="notification-form">
         {/* Type */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <div className="form-group">
+          <label className="form-label">
             Type
           </label>
           <select
             name="type"
             value={notification.type}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md bg-white dark:bg-gray-800 dark:text-white dark:border-gray-600"
+            className="form-select"
             required
           >
             <option value="update">Update</option>
@@ -73,8 +74,8 @@ const NotificationManager = () => {
         </div>
 
         {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <div className="form-group">
+          <label className="form-label">
             Title
           </label>
           <input
@@ -82,22 +83,22 @@ const NotificationManager = () => {
             name="title"
             value={notification.title}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
+            className="form-input"
             required
             placeholder="Enter notification title"
           />
         </div>
 
         {/* Message */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <div className="form-group">
+          <label className="form-label">
             Message
           </label>
           <textarea
             name="message"
             value={notification.message}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
+            className="form-textarea"
             required
             rows="4"
             placeholder="Enter notification message"
@@ -105,8 +106,8 @@ const NotificationManager = () => {
         </div>
 
         {/* Action */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <div className="form-group">
+          <label className="form-label">
             Action (Optional)
           </label>
           <input
@@ -114,14 +115,14 @@ const NotificationManager = () => {
             name="action"
             value={notification.action}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
+            className="form-input"
             placeholder="Enter call-to-action text"
           />
         </div>
 
         {/* Recipients */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <div className="form-group">
+          <label className="form-label">
             Recipients
           </label>
           <input
@@ -138,10 +139,10 @@ const NotificationManager = () => {
                 recipients
               }));
             }}
-            className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
+            className="form-input"
             placeholder="Enter recipient IDs (comma-separated) or 'all'"
           />
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="form-help-text">
             Leave empty to send to all users
           </p>
         </div>
@@ -149,7 +150,7 @@ const NotificationManager = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+          className="submit-button"
         >
           Send Notification
         </button>

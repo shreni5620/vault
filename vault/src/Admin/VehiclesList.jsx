@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, Plus, Download, MoreVertical, Edit, Trash2, Eye } from 'lucide-react';
+import './VehiclesList.css';
 
 function VehiclesList() {
   const [selectedTab, setSelectedTab] = useState('all');
@@ -86,61 +87,61 @@ function VehiclesList() {
   ];
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Vehicle Inventory</h1>
-        <div className="text-sm text-gray-500">
+    <div className="vehicles-container">
+      <div className="page-header">
+        <h1 className="page-title">Vehicle Inventory</h1>
+        <div className="breadcrumb">
           <a href="#">Home</a>
-          <span className="mx-2">/</span>
+          <span className="breadcrumb-separator">/</span>
           <span>Vehicles</span>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex space-x-4">
-          <div className="flex items-center bg-gray-100 p-2 rounded-lg">
+      <div className="actions-container">
+        <div className="filters-container">
+          <div className="search-box">
             <Search size={18} />
-            <input type="text" placeholder="Search vehicles..." className="bg-transparent border-none ml-2 focus:outline-none" />
+            <input type="text" placeholder="Search vehicles..." className="search-input" />
           </div>
-          <button className="flex items-center space-x-2 p-2 bg-blue-500 text-white rounded-lg">
+          <button className="filter-button">
             <Filter size={18} />
             <span>Filter</span>
           </button>
         </div>
-        <div className="flex space-x-4">
-          <button className="flex items-center space-x-2 p-2 bg-gray-100 rounded-lg">
+        <div className="actions-buttons">
+          <button className="export-button">
             <Download size={18} />
             <span>Export</span>
           </button>
-          <button className="flex items-center space-x-2 p-2 bg-green-500 text-white rounded-lg">
+          <button className="add-vehicle-button">
             <Plus size={18} />
             <span>Add Vehicle</span>
           </button>
         </div>
       </div>
 
-      <div className="mb-6">
-        <div className="flex space-x-4">
+      <div className="tabs-container">
+        <div className="tabs">
           <button 
-            className={`py-2 px-4 rounded-md ${selectedTab === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`tab-button ${selectedTab === 'all' ? 'active' : ''}`}
             onClick={() => setSelectedTab('all')}
           >
             All Vehicles
           </button>
           <button 
-            className={`py-2 px-4 rounded-md ${selectedTab === 'cars' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`tab-button ${selectedTab === 'cars' ? 'active' : ''}`}
             onClick={() => setSelectedTab('cars')}
           >
             Cars
           </button>
           <button 
-            className={`py-2 px-4 rounded-md ${selectedTab === 'suvs' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`tab-button ${selectedTab === 'suvs' ? 'active' : ''}`}
             onClick={() => setSelectedTab('suvs')}
           >
             SUVs
           </button>
           <button 
-            className={`py-2 px-4 rounded-md ${selectedTab === 'trucks' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`tab-button ${selectedTab === 'trucks' ? 'active' : ''}`}
             onClick={() => setSelectedTab('trucks')}
           >
             Trucks
@@ -148,18 +149,18 @@ function VehiclesList() {
         </div>
       </div>
 
-      <div className="overflow-x-auto shadow-md rounded-lg">
-        <table className="min-w-full table-auto">
+      <div className="table-container">
+        <table className="vehicles-table">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="px-4 py-2 text-left">ID</th>
-              <th className="px-4 py-2 text-left">Vehicle</th>
-              <th className="px-4 py-2 text-left">Year</th>
-              <th className="px-4 py-2 text-left">Type</th>
-              <th className="px-4 py-2 text-left">Price</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Last Updated</th>
-              <th className="px-4 py-2 text-left">Actions</th>
+            <tr>
+              <th>ID</th>
+              <th>Vehicle</th>
+              <th>Year</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Last Updated</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -172,49 +173,38 @@ function VehiclesList() {
                 return true;
               })
               .map(vehicle => (
-                <tr key={vehicle.id} className="border-b">
-                  <td className="px-4 py-2">{vehicle.id}</td>
-                  <td className="px-4 py-2">{vehicle.model}</td>
-                  <td className="px-4 py-2">{vehicle.year}</td>
-                  <td className="px-4 py-2">{vehicle.type}</td>
-                  <td className="px-4 py-2">{vehicle.price}</td>
-                  <td className="px-4 py-2">
-                    <span className={`inline-block px-2 py-1 text-xs rounded-full ${vehicle.status === 'active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                <tr key={vehicle.id}>
+                  <td>{vehicle.id}</td>
+                  <td>{vehicle.model}</td>
+                  <td>{vehicle.year}</td>
+                  <td>{vehicle.type}</td>
+                  <td>{vehicle.price}</td>
+                  <td>
+                    <span className={`status-badge ${vehicle.status}`}>
                       {vehicle.status}
                     </span>
                   </td>
-                  <td className="px-4 py-2">{vehicle.lastUpdated}</td>
-                  <td className="px-4 py-2 flex space-x-2">
-                    <button className="text-blue-500 hover:text-blue-700">
-                      <Eye size={16} />
-                    </button>
-                    <button className="text-yellow-500 hover:text-yellow-700">
-                      <Edit size={16} />
-                    </button>
-                    <button className="text-red-500 hover:text-red-700">
-                      <Trash2 size={16} />
-                    </button>
-                    <button className="text-gray-500 hover:text-gray-700">
-                      <MoreVertical size={16} />
-                    </button>
+                  <td>{vehicle.lastUpdated}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button className="action-button view">
+                        <Eye size={16} />
+                      </button>
+                      <button className="action-button edit">
+                        <Edit size={16} />
+                      </button>
+                      <button className="action-button delete">
+                        <Trash2 size={16} />
+                      </button>
+                      <button className="action-button more">
+                        <MoreVertical size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="flex justify-between items-center mt-6">
-        <span className="text-sm text-gray-500">Showing 1-7 of 42 vehicles</span>
-        <div className="flex space-x-2">
-          <button className="px-4 py-2 bg-gray-200 rounded-md text-sm" disabled>Previous</button>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm">1</button>
-          <button className="px-4 py-2 bg-gray-200 rounded-md text-sm">2</button>
-          <button className="px-4 py-2 bg-gray-200 rounded-md text-sm">3</button>
-          <span className="px-2 py-2 text-sm">...</span>
-          <button className="px-4 py-2 bg-gray-200 rounded-md text-sm">6</button>
-          <button className="px-4 py-2 bg-gray-200 rounded-md text-sm">Next</button>
-        </div>
       </div>
     </div>
   );
