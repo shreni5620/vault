@@ -74,6 +74,9 @@ app.use("/notification", notification)
 const adminRoutes = require("./src/routes/AdminRoutes")
 app.use("/admin", adminRoutes)
 
+const testDriveRoutes = require('./src/routes/TestDriveRoutes');
+app.use('/test-drives', testDriveRoutes);
+
 mongoose.connect("mongodb://127.0.0.1:27017/vehicle_vault").then(()=>{
     console.log("Connected to MongoDB")
 })

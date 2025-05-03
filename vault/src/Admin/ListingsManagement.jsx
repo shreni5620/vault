@@ -1,166 +1,216 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search, Filter, CheckCircle, XCircle, Eye,
-  Trash2, MoreVertical, ArrowUp, ArrowDown
+  Trash2, MoreVertical, ArrowUp, ArrowDown, Scale,
+  Clock, Calendar, Car, User, Activity
 } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 import './ListingsManagement.css';
 
 function ListingsManagement() {
   const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedCars, setSelectedCars] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [comparisonStats, setComparisonStats] = useState({
+    totalComparisons: 0,
+    todayComparisons: 0,
+    popularCombinations: []
+  });
+  const [testDriveRequests, setTestDriveRequests] = useState([]);
+  const [activityLogs, setActivityLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const listingsData = [
-    { id: 'LST-1001', vehicle: 'BMW X5', seller: 'John Smith', date: 'May 15, 2025', price: '$78,900', status: 'pending', featured: false },
-    { id: 'LST-1002', vehicle: 'Tesla Model 3', seller: 'Sarah Johnson', date: 'May 14, 2025', price: '$42,500', status: 'approved', featured: true },
-    { id: 'LST-1003', vehicle: 'Mercedes GLC', seller: 'Robert Williams', date: 'May 13, 2025', price: '$52,300', status: 'pending', featured: false },
-    { id: 'LST-1004', vehicle: 'Audi Q7', seller: 'Michelle Davis', date: 'May 12, 2025', price: '$65,700', status: 'approved', featured: true },
-    { id: 'LST-1005', vehicle: 'Toyota Camry', seller: 'David Wilson', date: 'May 11, 2025', price: '$28,500', status: 'rejected', featured: false },
-    { id: 'LST-1006', vehicle: 'Ford F-150', seller: 'Jessica Brown', date: 'May 10, 2025', price: '$45,900', status: 'approved', featured: false },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Fetch comparison statistics
+        const statsResponse = await fetch(API_ENDPOINTS.ADMIN_COMPARISON_STATS);
+        const statsData = await statsResponse.json();
+        setComparisonStats(statsData);
 
-  const filteredListings = listingsData.filter(listing =>
-    filterStatus === 'all' || listing.status === filterStatus
-  );
+        // Fetch test drive requests
+        const testDriveResponse = await fetch(API_ENDPOINTS.ADMIN_TEST_DRIVES);
+        const testDriveData = await testDriveResponse.json();
+        setTestDriveRequests(testDriveData);
 
-  const statusColor = {
-    approved: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    rejected: 'bg-red-100 text-red-700',
+        // Fetch activity logs
+        const activityResponse = await fetch(API_ENDPOINTS.ADMIN_ACTIVITY_LOGS);
+        const activityData = await activityResponse.json();
+        setActivityLogs(activityData);
+
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleTestDriveAction = async (requestId, action) => {
+    try {
+      const response = await fetch(`${API_ENDPOINTS.ADMIN_TEST_DRIVES}/${requestId}/${action}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Update the test drive requests list
+        const updatedRequests = testDriveRequests.map(request => {
+          if (request.id === requestId) {
+            return { ...request, status: action };
+          }
+          return request;
+        });
+        setTestDriveRequests(updatedRequests);
+      } else {
+        throw new Error('Failed to update test drive request');
+      }
+    } catch (err) {
+      setError('Failed to update test drive request. Please try again.');
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p className="error-message">{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
 
   return (
     <div className="listings-container">
-      <div className="listings-header">
-        <h1 className="listings-title">Listings Management</h1>
-        <div className="breadcrumb">
-          <a href="#" className="breadcrumb-link">Home</a> / Listings
-        </div>
-      </div>
+      {/* ... existing header and stats grid ... */}
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <p className="stat-value">42</p>
-          <p className="stat-label">Total Listings</p>
-        </div>
-        <div className="stat-card">
-          <p className="stat-value">8</p>
-          <p className="stat-label">Pending Review</p>
-        </div>
-        <div className="stat-card">
-          <p className="stat-value">28</p>
-          <p className="stat-label">Approved</p>
-        </div>
-        <div className="stat-card">
-          <p className="stat-value">6</p>
-          <p className="stat-label">Rejected</p>
-        </div>
-      </div>
-
-      <div className="listings-controls">
-        <div className="search-controls">
-          <div className="search-input-wrapper">
-            <Search className="search-icon" size={18} />
-            <input
-              type="text"
-              placeholder="Search listings..."
-              className="search-input"
-            />
+      <div className="comparison-stats-section">
+        <h2 className="section-title">Comparison Statistics</h2>
+        <div className="stats-cards">
+          <div className="stat-card">
+            <div className="stat-icon">
+              <Scale size={24} />
+            </div>
+            <div className="stat-content">
+              <h3>Total Comparisons</h3>
+              <p className="stat-value">{comparisonStats.totalComparisons}</p>
+              <p className="stat-subtitle">+{comparisonStats.todayComparisons} today</p>
+            </div>
           </div>
-          <button className="filter-button">
-            <Filter size={16} />
-            <span>Filter</span>
-          </button>
+          <div className="stat-card">
+            <div className="stat-icon">
+              <Car size={24} />
+            </div>
+            <div className="stat-content">
+              <h3>Popular Combinations</h3>
+              <ul className="popular-combinations">
+                {comparisonStats.popularCombinations.map((combo, index) => (
+                  <li key={index}>
+                    <span className="combo-cars">{combo.cars.join(' vs ')}</span>
+                    <span className="combo-count">{combo.count} times</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="status-filters">
-          {['all', 'pending', 'approved', 'rejected'].map(status => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`status-filter-button ${filterStatus === status ? 'active' : ''}`}
-            >
-              {status}
-            </button>
+      </div>
+
+      <div className="test-drive-section">
+        <h2 className="section-title">Test Drive Requests</h2>
+        <div className="test-drive-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Car</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Contact</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(testDriveRequests) && testDriveRequests.map(request => (
+                <tr key={request.id}>
+                  <td>{request.id}</td>
+                  <td>{request.car}</td>
+                  <td>{request.customer}</td>
+                  <td>{request.date}</td>
+                  <td>
+                    <span className={`status-badge ${request.status}`}>
+                      {request.status}
+                    </span>
+                  </td>
+                  <td>{request.contact}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button className="action-button view" title="View Details">
+                        <Eye size={16} />
+                      </button>
+                      {request.status === 'pending' && (
+                        <>
+                          <button 
+                            className="action-button approve" 
+                            title="Approve"
+                            onClick={() => handleTestDriveAction(request.id, 'approved')}
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                          <button 
+                            className="action-button reject" 
+                            title="Reject"
+                            onClick={() => handleTestDriveAction(request.id, 'rejected')}
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="activity-logs-section">
+        <h2 className="section-title">Recent Activity</h2>
+        <div className="activity-logs">
+          {activityLogs.map(log => (
+            <div key={log.id} className="activity-log">
+              <div className="log-icon">
+                {log.type === 'comparison' ? <Scale size={20} /> : <Car size={20} />}
+              </div>
+              <div className="log-content">
+                <div className="log-header">
+                  <span className="log-user">{log.user}</span>
+                  <span className="log-timestamp">{log.timestamp}</span>
+                </div>
+                <p className="log-details">{log.details}</p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
-      <div className="table-container">
-        <table className="listings-table">
-          <thead>
-            <tr className="table-header-row">
-              {['ID', 'Vehicle', 'Seller', 'Date', 'Price', 'Status', 'Featured', 'Actions'].map(header => (
-                <th key={header} className="table-header-cell">{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredListings.map(listing => (
-              <tr key={listing.id} className="table-row">
-                <td>{listing.id}</td>
-                <td>{listing.vehicle}</td>
-                <td>{listing.seller}</td>
-                <td>{listing.date}</td>
-                <td>{listing.price}</td>
-                <td>
-                  <span className={`status-badge ${listing.status}`}>
-                    {listing.status}
-                  </span>
-                </td>
-                <td className="featured-cell">
-                  {listing.featured
-                    ? <span className="featured-badge">Featured</span>
-                    : <span className="not-featured">-</span>}
-                </td>
-                <td>
-                  <div className="action-buttons">
-                    {listing.status === 'pending' && (
-                      <>
-                        <button className="action-button approve" title="Approve">
-                          <CheckCircle size={16} />
-                        </button>
-                        <button className="action-button reject" title="Reject">
-                          <XCircle size={16} />
-                        </button>
-                      </>
-                    )}
-                    <button className="action-button view" title="View">
-                      <Eye size={16} />
-                    </button>
-                    {!listing.featured && listing.status === 'approved' && (
-                      <button className="action-button feature" title="Feature">
-                        <ArrowUp size={16} />
-                      </button>
-                    )}
-                    {listing.featured && (
-                      <button className="action-button unfeature" title="Unfeature">
-                        <ArrowDown size={16} />
-                      </button>
-                    )}
-                    <button className="action-button delete" title="Delete">
-                      <Trash2 size={16} />
-                    </button>
-                    <button className="action-button more" title="More">
-                      <MoreVertical size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="pagination">
-        <span className="pagination-info">Showing 1–6 of 42 listings</span>
-        <div className="pagination-controls">
-          <button className="pagination-button" disabled>Previous</button>
-          <button className="pagination-button active">1</button>
-          <button className="pagination-button">2</button>
-          <button className="pagination-button">3</button>
-          <span className="pagination-ellipsis">...</span>
-          <button className="pagination-button">7</button>
-          <button className="pagination-button">Next</button>
-        </div>
-      </div>
+      {/* ... existing comparison modal and other code ... */}
     </div>
   );
 }
