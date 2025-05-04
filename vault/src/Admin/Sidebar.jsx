@@ -13,7 +13,7 @@ function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar, acti
     { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
     { id: 'vehicles', label: 'Vehicles', icon: <Car size={20} /> },
     { id: 'users', label: 'Users', icon: <Users size={20} /> },
-    { id: 'listings', label: 'Listings', icon: <ClipboardList size={20} /> },
+    { id: 'test-drive-requests', label: 'Test Drive Requests', icon: <ClipboardList size={20} /> },
     { id: 'analytics', label: 'Analytics', icon: <BarChart2 size={20} /> },
     { id: 'notifications', label: 'Notifications', icon: <Bell size={20} /> },
     {

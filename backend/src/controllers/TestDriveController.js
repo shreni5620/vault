@@ -1,4 +1,3 @@
-
 // // // const TestDrive = require('../models/TestDriveModel');
 // // // const nodemailer = require('nodemailer');
 
@@ -224,14 +223,7 @@
 //         from: '"VehicleVault" <patelshrenij@gmail.com>',
 //         to: 'shreni016@gmail.com',
 //         subject: 'New Test Drive Request',
-//         text: `New test drive request:
-// Customer: ${customer}
-// Car: ${car}
-// Email: ${email}
-// Phone: ${contact}
-// Date & Time: ${date}
-// Location: ${location}
-// Message: ${message || 'N/A'}`
+//         text: `New test drive request:\nCustomer: ${customer}\nCar: ${car}\nEmail: ${email}\nPhone: ${contact}\nDate & Time: ${date} ${preferredTime}\nLocation: ${location}\nMessage: ${message || 'N/A'}`
 //       });
 //     } catch (err) {
 //       console.error('Failed to send email:', err);
@@ -370,9 +362,49 @@ exports.updateTestDriveStatus = async (req, res) => {
       return res.status(404).json({ error: 'Test drive request not found' });
     }
 
+    // Send email to user
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'patelshrenij@gmail.com', // your email
+          pass: 'nelv bmxd kcke hutz'      // your app password
+        }
+      });
+
+      let subject, text;
+      if (action === 'approved') {
+        subject = 'Your Test Drive Request is Approved!';
+        text = `Hello ${updated.customer},\n\nYour test drive request for ${updated.car} on ${updated.date} has been approved.\n\nThank you!`;
+      } else {
+        subject = 'Your Test Drive Request is Rejected';
+        text = `Hello ${updated.customer},\n\nWe are sorry, but your test drive request for ${updated.car} on ${updated.date} has been rejected.\n\nThank you!`;
+      }
+
+      await transporter.sendMail({
+        from: '"VehicleVault" <patelshrenij@gmail.com>',
+        to: updated.email,
+        subject,
+        text
+      });
+      console.log(`Email sent to ${updated.email} for status: ${action}`);
+    } catch (err) {
+      console.error('Failed to send email:', err);
+    }
+
     res.json(updated);
   } catch (err) {
     console.error('Failed to update test drive status:', err);
     res.status(500).json({ error: 'Server error', details: err.message });
+  }
+};
+
+exports.createTestDrive = async (req, res) => {
+  try {
+    const newRequest = new TestDrive(req.body);
+    await newRequest.save();
+    res.status(201).json({ message: 'Test drive scheduled!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to schedule test drive.' });
   }
 };

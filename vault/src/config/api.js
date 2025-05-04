@@ -9,7 +9,9 @@ export const API_ENDPOINTS = {
     WISHLIST: `${API_BASE_URL}/wishlist`,
     WISHLIST_ADD: `${API_BASE_URL}/wishlist/add`,
     WISHLIST_REMOVE: `${API_BASE_URL}/wishlist/remove`,
-    NOTIFICATIONS: `${API_BASE_URL}/notification`
+    NOTIFICATIONS: `${API_BASE_URL}/notification`,
+    CAR: `${API_BASE_URL}/car`,
+    USER: `${API_BASE_URL}/user`,
 };
 
 export default API_BASE_URL;

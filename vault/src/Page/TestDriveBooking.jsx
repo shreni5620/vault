@@ -23,11 +23,37 @@ const TestDriveBooking = ({ car, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Test Drive Form:', formData);
-    setSubmitted(true);
+
+    // Prepare the data to match backend expectations
+    const payload = {
+      car: car.name, // or car._id if you want to store the car id
+      customer: formData.fullName,
+      email: formData.email,
+      contact: formData.phone,
+      date: formData.preferredDate,
+      preferredTime: formData.preferredTime,
+      location: formData.location,
+      message: formData.additionalMessage,
+      status: "Pending"
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/api/test-drives", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        alert("Failed to schedule test drive. Please try again.");
+      }
+    } catch (err) {
+      alert("Error connecting to server.");
+    }
   };
 
   if (submitted) {

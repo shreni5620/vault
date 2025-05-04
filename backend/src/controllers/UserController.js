@@ -164,4 +164,5 @@ module.exports = {
     contactSeller,
     blockUser,
     deleteUser,
+    signup: userSignup,
 };

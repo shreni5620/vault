@@ -23,7 +23,7 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/user/login', { email, password });
+      const response = await axios.post('http://localhost:3000/api/user/login', { email, password });
 
       if (response.data.error === false) {
         // Store login state

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './UserList.css';
+import { API_ENDPOINTS } from '../config/api';
 
 function AdminUserList() {
   const [users, setUsers] = useState([]);
@@ -13,20 +14,20 @@ function AdminUserList() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const res = await axios.get('http://localhost:3000/user');
+    const res = await axios.get(API_ENDPOINTS.USER);
     setUsers(res.data.users || []);
     setLoading(false);
   };
 
   const handleBlock = async (id, currentStatus) => {
     const newStatus = currentStatus === "active" ? "blocked" : "active";
-    await axios.patch(`http://localhost:3000/user/${id}/block`, { status: newStatus });
+    await axios.patch(`${API_ENDPOINTS.USER}/${id}/block`, { status: newStatus });
     fetchUsers();
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      await axios.delete(`http://localhost:3000/user/${id}`);
+      await axios.delete(`${API_ENDPOINTS.USER}/${id}`);
       fetchUsers();
     }
   };

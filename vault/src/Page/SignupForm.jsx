@@ -40,7 +40,7 @@ export default function SignupForm() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/user/signup', formData);
+      const response = await axios.post('http://localhost:3000/api/user/signup', formData);
       if (response.data.error == false) {
         alert(response.data.message);
         navigate('/login');

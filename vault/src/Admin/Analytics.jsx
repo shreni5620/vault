@@ -1,9 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BarChart2, LineChart, Calendar, Download } from 'lucide-react';
 import './Analytics.css';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+import axios from "axios";
 
 function Analytics() {
   const [timeRange, setTimeRange] = useState('month');
+  const [viewsData, setViewsData] = useState({ labels: [], data: [] });
+  const [vehicleTypes, setVehicleTypes] = useState([]);
+  const [userAcquisition, setUserAcquisition] = useState([]);
+  const [regionPerformance, setRegionPerformance] = useState([]);
+  const [stats, setStats] = useState({
+    users: 0,
+    vehicles: 0,
+    testDrives: 0,
+    views: 0,
+    wishlist: 0
+  });
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/admin/analytics/vehicle-views")
+      .then(res => setViewsData(res.data))
+      .catch(err => console.error("Failed to fetch data:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/admin/analytics/top-vehicle-types")
+      .then(res => setVehicleTypes(res.data))
+      .catch(err => console.error("Failed to fetch vehicle types:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/admin/analytics/user-acquisition")
+      .then(res => setUserAcquisition(res.data))
+      .catch(err => console.error("Failed to fetch user acquisition:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/admin/analytics/region-performance")
+      .then(res => setRegionPerformance(res.data))
+      .catch(err => console.error("Failed to fetch region performance:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/admin/stats")
+      .then(res => setStats(res.data))
+      .catch(err => console.error("Failed to fetch stats:", err));
+  }, []);
+
+  const chartData = {
+    labels: viewsData.labels,
+    datasets: [
+      {
+        label: 'Vehicle Views',
+        data: viewsData.data,
+        backgroundColor: '#2d6cdf',
+        borderRadius: 6,
+      },
+    ],
+  };
 
   return (
     <div className="analytics-container">
@@ -13,6 +70,29 @@ function Analytics() {
           <a href="#" className="breadcrumb-link">Home</a>
           <span>/</span>
           <span>Analytics</span>
+        </div>
+      </div>
+      {/* Stats Cards Section */}
+      <div className="stats-cards" style={{ display: 'flex', gap: '1rem', margin: '2rem 0' }}>
+        <div className="stat-card" style={{ background: '#fff', padding: '1rem', borderRadius: 8, boxShadow: '0 1px 4px #0001', flex: 1, textAlign: 'center' }}>
+          <h4>Users</h4>
+          <p>{stats.users}</p>
+        </div>
+        <div className="stat-card" style={{ background: '#fff', padding: '1rem', borderRadius: 8, boxShadow: '0 1px 4px #0001', flex: 1, textAlign: 'center' }}>
+          <h4>Vehicles</h4>
+          <p>{stats.vehicles}</p>
+        </div>
+        <div className="stat-card" style={{ background: '#fff', padding: '1rem', borderRadius: 8, boxShadow: '0 1px 4px #0001', flex: 1, textAlign: 'center' }}>
+          <h4>Test Drives</h4>
+          <p>{stats.testDrives}</p>
+        </div>
+        <div className="stat-card" style={{ background: '#fff', padding: '1rem', borderRadius: 8, boxShadow: '0 1px 4px #0001', flex: 1, textAlign: 'center' }}>
+          <h4>Views</h4>
+          <p>{stats.views}</p>
+        </div>
+        <div className="stat-card" style={{ background: '#fff', padding: '1rem', borderRadius: 8, boxShadow: '0 1px 4px #0001', flex: 1, textAlign: 'center' }}>
+          <h4>Wishlist</h4>
+          <p>{stats.wishlist}</p>
         </div>
       </div>
 
@@ -74,18 +154,20 @@ function Analytics() {
             </div>
           </div>
           <div className="chart-container">
+            <Bar data={chartData} options={{
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true } }
+            }} />
             <div className="y-axis">
               {['100k', '80k', '60k', '40k', '20k', '0'].map(label => (
                 <span key={label}>{label}</span>
               ))}
             </div>
-            <div className="chart-content">
-              <div className="chart-bars"></div>
-              <div className="x-axis">
-                {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'].map(m => (
-                  <span key={m}>{m}</span>
-                ))}
-              </div>
+            <div className="x-axis">
+              {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'].map(m => (
+                <span key={m}>{m}</span>
+              ))}
             </div>
           </div>
         </div>
@@ -103,20 +185,14 @@ function Analytics() {
             </div>
           </div>
           <div className="vehicle-types">
-            {[
-              { label: 'SUVs', value: '42.5%', height: '85%' },
-              { label: 'Sedans', value: '32.5%', height: '65%' },
-              { label: 'Trucks', value: '20%', height: '40%' },
-              { label: 'Electric', value: '10%', height: '20%' },
-              { label: 'Luxury', value: '5%', height: '10%' },
-            ].map(({ label, value, height }) => (
-              <div key={label} className="vehicle-type-item">
+            {vehicleTypes.map(({ _id, count }) => (
+              <div key={_id} className="vehicle-type-item">
                 <div
                   className="vehicle-type-bar"
-                  style={{ height }}
+                  style={{ height: `${(count / Math.max(...vehicleTypes.map(v => v.count)) * 100)}%` }}
                 ></div>
-                <span className="vehicle-type-label">{label}</span>
-                <span className="vehicle-type-value">{value}</span>
+                <span className="vehicle-type-label">{_id}</span>
+                <span className="vehicle-type-value">{count}</span>
               </div>
             ))}
           </div>
@@ -139,16 +215,11 @@ function Analytics() {
               <span className="donut-label">Donut Chart</span>
             </div>
             <div className="acquisition-legend">
-              {[
-                { label: 'Search', value: '45%', color: 'blue' },
-                { label: 'Direct', value: '25%', color: 'green' },
-                { label: 'Social', value: '20%', color: 'pink' },
-                { label: 'Referral', value: '10%', color: 'yellow' },
-              ].map(({ label, value, color }) => (
-                <div key={label} className="legend-item">
-                  <div className="legend-color" style={{ backgroundColor: color }}></div>
-                  <span className="legend-label">{label}</span>
-                  <span className="legend-value">{value}</span>
+              {userAcquisition.map(({ _id, count }) => (
+                <div key={_id} className="legend-item">
+                  <div className="legend-color" style={{ backgroundColor: _id === 'Search' ? 'blue' : _id === 'Direct' ? 'green' : _id === 'Social' ? 'pink' : 'yellow' }}></div>
+                  <span className="legend-label">{_id}</span>
+                  <span className="legend-value">{count}</span>
                 </div>
               ))}
             </div>
@@ -171,24 +242,14 @@ function Analytics() {
             <div className="table-header">
               <span>Region</span>
               <span>Listings</span>
-              <span>Growth</span>
             </div>
-            {[
-              { region: 'East Coast', listings: '3,245', growth: '+12.4%' },
-              { region: 'West Coast', listings: '2,890', growth: '+8.7%' },
-              { region: 'Midwest', listings: '1,932', growth: '-2.3%' },
-              { region: 'South', listings: '2,541', growth: '+15.8%' },
-              { region: 'Northwest', listings: '1,245', growth: '+5.1%' },
-            ].map(({ region, listings, growth }) => (
+            {regionPerformance.map(({ _id, listings }) => (
               <div
-                key={region}
+                key={_id}
                 className="table-row"
               >
-                <span>{region}</span>
+                <span>{_id}</span>
                 <span>{listings}</span>
-                <span className={`growth-value ${growth.startsWith('+') ? 'positive' : 'negative'}`}>
-                  {growth}
-                </span>
               </div>
             ))}
           </div>

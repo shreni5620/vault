@@ -24,6 +24,20 @@ const getWishlist = async (req, res) => {
     }
 };
 
+const getWishListData = async (req, res) => {
+    const wishListData = await Wishlist.find()
+    console.log(wishListData);
+    const result = wishListData.map(data=>{
+        return {
+            userId : data.userId,
+            vehicleId : data.vehicleId,
+            name : data.carData.name,
+            price : data.carData.price
+        }
+    })
+    res.status(200).json({wishListData : result})
+}
+
 const addToWishlist = async (req, res) => {
     try {
         const { userId, vehicleId, carData } = req.body;
@@ -105,5 +119,6 @@ const removeFromWishlist = async (req, res) => {
 module.exports = {
     getWishlist,
     addToWishlist,
-    removeFromWishlist
+    removeFromWishlist,
+    getWishListData
 };

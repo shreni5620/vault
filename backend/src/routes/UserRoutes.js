@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/UserController');
 
-router.post('/signup', userController.userSignup); // Signup
+router.post('/signup', userController.signup); // Signup
 router.post('/login', userController.userLogin);   // Login
 router.get('/', userController.getAllUsers);       // Get all users (for admin)
 router.post("/user/forgotpassword",userController.forgotPassword)

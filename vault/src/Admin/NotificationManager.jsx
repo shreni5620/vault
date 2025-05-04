@@ -111,7 +111,7 @@ const NotificationManager = () => {
                             ['all'] : notification.recipients
             };
 
-            const response = await axios.post(`${BACKEND_URL}/notification`, notificationData, {
+            const response = await axios.post(`${BACKEND_URL}/api/notification`, notificationData, {
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 5000
             });

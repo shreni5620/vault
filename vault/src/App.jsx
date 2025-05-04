@@ -25,7 +25,6 @@ import UserProfile from './Page/UserProfile';
 import Dashboard from './Admin/Dashboard';
 import Analytics from './Admin/Analytics';
 import DashboardHome from './Admin/DashboardHome';
-import ListingsManagement from './Admin/ListingsManagement';
 import { Settings, Sidebar } from 'lucide-react';
 import UserList from './Admin/UserList';
 import VehiclesList from './Admin/VehiclesList';
@@ -91,7 +90,6 @@ function App() {
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path='/admin/analytics' element={<Analytics />} />
         <Route path='dashboardhome' element={<DashboardHome />} />
-        <Route path='listingmanagement' element={<ListingsManagement />} />
         <Route path='notificationmanager' element={<NotificationManager />} />
         <Route path='navbar' element={<Navbar />} />
         <Route path='settings' element={<Settings />} />

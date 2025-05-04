@@ -4,10 +4,10 @@ import Navbar from './Navbar';
 import DashboardHome from './DashboardHome';
 import VehiclesList from './VehiclesList';
 import UsersList from './UserList';
-import ListingsManagement from './ListingsManagement';
 import Analytics from './Analytics';
 import Settings from './Settings';
 import NotificationManager from './NotificationManager';
+import AdminTestDriveRequests from './AdminTestDriveRequests';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -27,6 +27,7 @@ function Dashboard() {
   const adminName = localStorage.getItem('adminName');
 
   const renderPage = () => {
+    // return <AdminTestDriveRequests />; // Uncomment this line to test
     switch (currentPage) {
       case 'dashboard':
         return <DashboardHome />;
@@ -42,6 +43,8 @@ function Dashboard() {
         return <NotificationManager />;
       case 'settings':
         return <Settings activeTab={activeSettingsTab} setActiveTab={handleSettingsTabChange} />;
+      case 'test-drive-requests':
+        return <AdminTestDriveRequests />;
       default:
         return <DashboardHome />;
     }

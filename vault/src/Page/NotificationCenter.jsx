@@ -124,7 +124,7 @@ const NotificationCenter = () => {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/notification?userId=' + userId)
+    axios.get('http://localhost:3000/api/notification?userId=' + userId)
       .then(res => {
         if (res.data.success) setNotifications(res.data.notifications);
       });

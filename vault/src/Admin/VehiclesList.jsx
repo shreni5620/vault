@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './VehiclesList.css'; // Reuse the same CSS for consistent styling
+import { API_ENDPOINTS } from '../config/api';
 
 function VehiclesList() {
   const [cars, setCars] = useState([]);
@@ -14,7 +15,7 @@ function VehiclesList() {
 
   const fetchCars = async () => {
     setLoading(true);
-    const res = await axios.get('http://localhost:3000/car');
+    const res = await axios.get(API_ENDPOINTS.CAR);
     setCars(res.data.data || []); // Adjust according to your backend response
     setLoading(false);
   };
@@ -31,9 +32,9 @@ function VehiclesList() {
       price: Number(String(form.price).replace(/,/g, ""))
     };
     if (editingId) {
-      await axios.put(`http://localhost:3000/car/${editingId}`, carData);
+      await axios.put(`${API_ENDPOINTS.CAR}/${editingId}`, carData);
     } else {
-      await axios.post('http://localhost:3000/car', carData);
+      await axios.post(API_ENDPOINTS.CAR, carData);
     }
     setForm({ name: '', model: '', price: '' });
     setEditingId(null);
@@ -47,7 +48,7 @@ function VehiclesList() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this car?")) {
-      await axios.delete(`http://localhost:3000/car/${id}`);
+      await axios.delete(`${API_ENDPOINTS.CAR}/${id}`);
       fetchCars();
     }
   };

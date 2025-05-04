@@ -11,4 +11,6 @@ router.post('/add', wishlistController.addToWishlist);
 // Remove item from wishlist
 router.delete('/remove/:vehicleId', wishlistController.removeFromWishlist);
 
+router.get("/getWishListData", wishlistController.getWishListData)
+
 module.exports = router;

@@ -23,7 +23,7 @@ const AdminLoginForm = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/admin/login', { email, password });
+      const response = await axios.post('http://localhost:3000/api/user/login', { email, password });
 
       if (response.data.token) {
         // Store the token in localStorage

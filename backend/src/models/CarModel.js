@@ -102,11 +102,12 @@ module.exports = mongoose.model("car", carSchema) */
 const mongoose = require('mongoose');
 
 const carSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    model: { type: String, required: true },
-    price: { type: Number, required: true }
+    model: String,
+    price: Number,
+    status: String,
+    listingDate: Date,
+    // Add other fields as needed
 });
 
-const Car = mongoose.model('Car', carSchema);
+module.exports = mongoose.model('Car', carSchema);
 
-module.exports = Car;
