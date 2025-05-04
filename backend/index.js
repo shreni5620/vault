@@ -54,6 +54,8 @@ const wishlistRoutes = require("./src/routes/WishlistRoutes");
 const notificationRoutes = require("./src/routes/NotificationRoutes");
 const adminRoutes = require("./src/routes/AdminRoutes");
 const testDriveRoutes = require("./src/routes/TestDriveRoutes");
+const comparisonRoutes = require("./src/routes/ComparisonRoutes");
+const accessorySuggestionRoutes = require('./src/routes/AccessorySuggestionRoutes');
 
 // Route handlers with /api prefix
 app.use("/api/user", userRoutes);
@@ -70,6 +72,8 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/test-drives", testDriveRoutes);
+app.use("/api/comparison", comparisonRoutes);
+app.use('/api/accessory-suggestion', accessorySuggestionRoutes);
 
 // MongoDB connection
 mongoose

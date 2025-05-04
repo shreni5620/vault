@@ -36,7 +36,8 @@ const TestDriveSchema = new mongoose.Schema({
   preferredTime: { type: String },
   location: { type: String, required: true },
   message: { type: String },
-  status: { type: String, default: 'pending' }
+  status: { type: String, default: 'pending' },
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('TestDrive', TestDriveSchema);

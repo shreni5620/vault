@@ -153,8 +153,19 @@
 
 .notification-actions {
   display: flex;
-  gap: 4px;
+  gap: 8px;
+  align-items: center;
 }
+
+.btn-approve, .btn-reject {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.btn-approve { color: #4caf50; } /* Green */
+.btn-reject { color: #f44336; }  /* Red */
 
 .read-button,
 .delete-button {

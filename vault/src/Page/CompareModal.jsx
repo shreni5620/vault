@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Car, Fuel, Settings, Calendar, IndianRupee } from 'lucide-react';
 
 const CompareModal = ({ cars, onClose }) => {
+  const [suggestions, setSuggestions] = useState([]);
   const specs = [
     { label: 'Price', key: 'price', icon: IndianRupee },
     { label: 'Type', key: 'type', icon: Car },
@@ -23,6 +24,37 @@ const CompareModal = ({ cars, onClose }) => {
       </div>
     );
   }
+
+  const saveComparison = (comparedCars) => {
+    fetch('http://localhost:3000/api/comparison', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        comparedCars // e.g. ["BMW X5", "Audi Q7", "Mercedes GLC"]
+      })
+    });
+  };
+
+  const getAccessorySuggestions = async (comparedCars) => {
+    const res = await fetch('http://localhost:3000/api/accessory-suggestion/suggest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ comparedCars })
+    });
+    const data = await res.json();
+    setSuggestions(data.suggestions || []);
+  };
+
+  // Save comparison when modal opens and there are at least 2 cars
+  useEffect(() => {
+    if (cars && cars.length >= 2) {
+      const comparedCars = cars.map(car => car.name.replace(/^20\d{2} /, ''));
+      console.log("Compared cars being sent:", comparedCars);
+      saveComparison(comparedCars);
+      getAccessorySuggestions(comparedCars);
+    }
+    // eslint-disable-next-line
+  }, [cars]);
 
   return (
     <div className="modal-overlay">
@@ -62,6 +94,16 @@ const CompareModal = ({ cars, onClose }) => {
             </div>
           ))}
         </div>
+        {suggestions.length > 0 && (
+          <div className="accessory-suggestions" style={{ marginTop: '2rem' }}>
+            <h3>Recommended Accessories</h3>
+            <ul>
+              {suggestions.map((name, idx) => (
+                <li key={idx}>{name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -101,13 +101,13 @@ module.exports = mongoose.model("car", carSchema) */
 
 const mongoose = require('mongoose');
 
-const carSchema = new mongoose.Schema({
+const CarSchema = new mongoose.Schema({
     model: String,
     price: Number,
     status: String,
     listingDate: Date,
     // Add other fields as needed
-});
+}, { timestamps: true }); // This adds createdAt and updatedAt automatically
 
-module.exports = mongoose.model('Car', carSchema);
+module.exports = mongoose.model('Car', CarSchema);
 

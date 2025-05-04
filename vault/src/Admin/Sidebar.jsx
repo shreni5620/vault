@@ -35,6 +35,16 @@ function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar, acti
     setActiveSettingsTab(subItemId);
   };
 
+  const handleLogout = () => {
+    // Remove user data from localStorage/sessionStorage
+    localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminName');
+    // If you use a token, remove it too:
+    localStorage.removeItem('token');
+    // Redirect to login page
+    window.location.href = '/admin/login'; // or '/' for home
+  };
+
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       {/* Header */}
@@ -117,7 +127,7 @@ function Sidebar({ currentPage, setCurrentPage, isCollapsed, toggleSidebar, acti
             <HelpCircle size={20} />
             {!isCollapsed && <span className="button-text">Help</span>}
           </button>
-          <button className="footer-button">
+          <button className="footer-button" onClick={handleLogout}>
             <LogOut size={20} />
             {!isCollapsed && <span className="button-text">Logout</span>}
           </button>

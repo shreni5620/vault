@@ -214,17 +214,17 @@ const NotificationCenter = () => {
                   <div className="notification-actions">
                     {!notification.read && (
                       <button 
-                        className="read-button"
+                        className="btn-approve"
                         onClick={() => markAsRead(notification._id)}
                       >
-                        <Check size={16} />
+                        ✓
                       </button>
                     )}
                     <button 
-                      className="delete-button"
+                      className="btn-reject"
                       onClick={() => deleteNotification(notification._id)}
                     >
-                      <X size={16} />
+                      ✗
                     </button>
                   </div>
                 </div>

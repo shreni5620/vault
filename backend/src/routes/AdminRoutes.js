@@ -40,6 +40,9 @@ const Vehicle = require('../models/CarModel');
 const User = require('../models/UserModel');
 const Order = require('../models/OrderModel');
 const TestDrive = require('../models/TestDriveModel'); // Adjust path as needed
+const AccessorySuggestion = require('../models/AccessorySuggestionModel'); // If you have one
+const Comparison = require('../models/ComparisonModel');
+const { getTopComparedCars } = require('../controllers/ComparisonController');
 
 // Auth Routes
 router.post("/login", login);
@@ -227,6 +230,61 @@ router.get('/stats', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: true, message: "Failed to fetch stats" });
   }
+});
+
+// Monthly User Registrations
+router.get('/analytics/monthly-user-registrations', async (req, res) => {
+  const result = await User.aggregate([
+    { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
+    { $sort: { "_id": 1 } }
+  ]);
+  const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const data = Array(12).fill(0);
+  result.forEach(r => { data[r._id - 1] = r.count; });
+  res.json({ labels, data });
+});
+
+// Monthly Car Posts by Admin
+router.get('/analytics/monthly-car-posts', async (req, res) => {
+  const result = await Vehicle.aggregate([
+    { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
+    { $sort: { "_id": 1 } }
+  ]);
+  const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const data = Array(12).fill(0);
+  result.forEach(r => { data[r._id - 1] = r.count; });
+  res.json({ labels, data });
+});
+
+// Top Compared Cars
+router.get('/analytics/top-compared-cars', getTopComparedCars);
+
+// Accessory Suggestions by Popularity
+router.get('/analytics/accessory-suggestions', async (req, res) => {
+  try {
+    const result = await AccessorySuggestion.aggregate([
+      { $unwind: "$accessories" },
+      { $group: { _id: "$accessories.name", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+    const labels = result.map(r => r._id);
+    const data = result.map(r => r.count);
+    res.json({ labels, data });
+  } catch (err) {
+    res.status(500).json({ error: true, message: "Failed to fetch accessory suggestions analytics" });
+  }
+});
+
+// Test Drive Requests Over Time
+router.get('/analytics/test-drive-requests', async (req, res) => {
+  const result = await TestDrive.aggregate([
+    { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
+    { $sort: { "_id": 1 } }
+  ]);
+  const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const data = Array(12).fill(0);
+  result.forEach(r => { data[r._id - 1] = r.count; });
+  res.json({ labels, data });
 });
 
 module.exports = router;
