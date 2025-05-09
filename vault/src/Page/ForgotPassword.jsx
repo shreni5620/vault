@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     setLoading(true);
   
     try {
-      const response = await fetch("http://localhost:3000/otp/send", {  // 'await' now works inside async
+      const response = await fetch("http://localhost:3000/api/otp/send", {  // 'await' now works inside async
         method: "POST",
         headers: {
           "Content-Type": "application/json",

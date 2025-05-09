@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Login attempt:", email, password);
+  // console.log("Login attempt:", email, password);
 
   try {
     const admin = await Admin.findOne({ email: { $regex: new RegExp('^' + email + '$', 'i') } });
-    console.log("Admin found:", admin);
+    // console.log("Admin found:", admin);
 
     if (!admin) {
       return res.json({ error: true, message: "Invalid email" });
@@ -38,7 +38,7 @@ const createAdmin = async (req, res) => {
     await Admin.create({ name, email, password });
     res.json({ success: true, message: "Admin created!" });
   } catch (err) {
-    console.error("Admin create error:", err);
+    // console.error("Admin create error:", err);
     res.status(500).json({ success: false, message: "Error creating admin", error: err });
   }
 };

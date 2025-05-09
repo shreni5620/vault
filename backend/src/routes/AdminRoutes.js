@@ -47,6 +47,7 @@ const { getTopComparedCars } = require('../controllers/ComparisonController');
 // Auth Routes
 router.post("/login", login);
 router.post("/create", createAdmin);
+router.post("/test-drives",getAllTestDrives);
 
 // Admin Stats
 router.get("/comparison-stats", (req, res) => {
